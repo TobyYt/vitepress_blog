@@ -1,6 +1,7 @@
 import { defineConfig } from "vitepress";
 
 export default defineConfig({
+  base: "/vitepress_blog/",
   lang: "zh-CN",
   title: "玄甲团队",
   themeConfig: {
