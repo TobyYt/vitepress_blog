@@ -1,50 +1,32 @@
-# .github/workflows/pages.yml
-name: Deploy to GitHub Pages
+name: Deploy
 
 on:
   push:
-    branches: [main] # 根据你的默认分支修改
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
+    branches:
+      - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v3
         with:
-          node-version: 20 #node版本
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build with VitePress
-        run: pnpm run docs:build #根据package.json的scripts对象修改
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v2
         with:
-          path: docs/.vitepress/dist #构建输出目录
+          version: 6.32.9
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: windows-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Build
+        run: pnpm docs:build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/.vitepress/dist
+          # cname: example.com # if wanna deploy to custom domain
