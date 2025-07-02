@@ -2,7 +2,7 @@
 
 ## 起因
 
-我们知道 <mark>Promise</mark> 的出现极大地解决了 <mark>回调地狱</mark>，但是如果使用流程非常复杂的话，就非常容易过多地调用 <mark>Promise</mark> 的 <mark>then()</mark> 方法，这样也不利于使用和阅读。
+我们知道 <mark>Promise</mark> 的出现极大地解决了 <mark>回调地狱</mark>，但是如果使用流程非常复杂的话，就非常容易过多地调用 <mark>Promise</mark> 的 <mark>then()</mark> 方法，这样也不利于使用和阅读
 
 例如： 我希望在请求 www.baidu.com 后先输出请求的结果，再去请求 www.taobao.com 后再输出请求结果，如果只用 Promise 实现，那么代码就是下面的样子：
 
